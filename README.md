@@ -22,22 +22,25 @@ adb install -r PiPup-modern-targetSdk34-debug.apk
 adb shell appops set nl.rogro82.pipup SYSTEM_ALERT_WINDOW allow   # overlay perm (no TV Settings UI)
 ```
 
-## Branches
-- **`master`** — original toolchain: Gradle 5.1.1 / AGP 3.4.1 / Kotlin 1.3.31,
-  `com.android.support`, compile/targetSdk 28. Builds only on **JDK 8**.
-- **`modernize-agp8`** — modernized: Gradle 8.7 / AGP 8.5.2 / Kotlin 1.9.24, AndroidX,
-  compile/targetSdk 34, Glide 4. Builds on **JDK 17**. Removes the Play Protect warning.
+## Toolchain
+`master` builds with the modern stack — Gradle 8.7 / AGP 8.5.2 / Kotlin 1.9.24,
+AndroidX, compile/targetSdk 34, Glide 4 — and requires **JDK 17**. This is the
+recommended build and removes the Play Protect "older Android" warning.
+
+The original pre-modernization toolchain (Gradle 5.1.1 / AGP 3.4.1 / Kotlin 1.3.31,
+`com.android.support`, targetSdk 28, **JDK 8**) is preserved in history at commit
+[`172f2e6`](https://github.com/AnttiKaleva/PiPup/tree/172f2e6); a prebuilt legacy
+APK is attached to the [v0.1.5-modern release](https://github.com/AnttiKaleva/PiPup/releases/tag/v0.1.5-modern).
 
 ## Build from source
 ```bash
-# modern (this branch)
 JAVA_HOME=/path/to/jdk-17 ./gradlew assembleDebug
-
-# legacy (master branch)
-JAVA_HOME=/path/to/jdk-8  ./gradlew assembleDebug
 ```
 Output: `app/build/outputs/apk/debug/app-debug.apk`. Requires the Android SDK with
-the matching platform + build-tools (28 for legacy, 34 for modern).
+platform-34 + build-tools 34.0.0.
+
+To build the original instead: `git checkout 172f2e6` and use **JDK 8** with
+platform-28 + build-tools 28.0.3.
 
 ## Usage
 Send a popup (multipart form to the device on port 7979):
